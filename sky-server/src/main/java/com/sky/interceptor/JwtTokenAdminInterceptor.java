@@ -1,6 +1,7 @@
 package com.sky.interceptor;
 
 import com.sky.constant.JwtClaimsConstant;
+import com.sky.context.BaseContext;
 import com.sky.properties.JwtProperties;
 import com.sky.utils.JwtUtil;
 import io.jsonwebtoken.Claims;
@@ -38,7 +39,7 @@ public class JwtTokenAdminInterceptor implements HandlerInterceptor {
             return true;
         }
 
-        //1、从请求头中获取令牌
+        //1、从请求头中获取令牌：获取指定名称的 HTTP 请求头的值，即获取 token 的值
         String token = request.getHeader(jwtProperties.getAdminTokenName());
 
         //2、校验令牌
@@ -46,6 +47,7 @@ public class JwtTokenAdminInterceptor implements HandlerInterceptor {
             log.info("jwt校验:{}", token);
             Claims claims = JwtUtil.parseJWT(jwtProperties.getAdminSecretKey(), token);
             Long empId = Long.valueOf(claims.get(JwtClaimsConstant.EMP_ID).toString());
+            BaseContext.setCurrentId(empId); // 在拦截请求时，为ThreadLocal设置一个值：当前用户的id
             log.info("当前员工id：", empId);
             //3、通过，放行
             return true;

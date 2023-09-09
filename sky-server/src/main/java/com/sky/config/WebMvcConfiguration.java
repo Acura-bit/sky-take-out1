@@ -58,10 +58,11 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
     }
 
     /**
-     * 设置静态资源映射
+     * 设置静态资源映射，访问接口文档（html、js、css）
      * @param registry
      */
     protected void addResourceHandlers(ResourceHandlerRegistry registry) {
+        log.info("准备生成接口文档");
         registry.addResourceHandler("/doc.html").addResourceLocations("classpath:/META-INF/resources/");
         registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
     }
